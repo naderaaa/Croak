@@ -1,0 +1,37 @@
+<main>
+  <div>
+    <h1 class="title">{{ title }}</h1>
+  </div>
+  
+</main>
+
+<!-- <div [innerHtml]="tasksToHTML()"></div> -->
+
+@for (task of tasks; track task.description; let i = $index) {
+  <input type="checkbox" name="task{{i}}"> {{ task.description }}
+  <br>
+}
+
+<router-outlet /><p>Task count: {{ tasks.length }}</p>
+
+<div class="bottom-bar">
+  <button (click)="addTask()" class="frogButton1">Add a Task!</button>
+  @if (taskFieldRequested) {
+    <form [formGroup]="frogForm" id="addFrogForm" (ngSubmit)="handleSubmit()">
+      
+      Task: <input type="text" formControlName="task" required/><br>
+
+      Name your frog! (optional) <input type="text" formControlName="frogName"/><br> 
+
+      Give your frog a size! (optional)
+      <select formControlName="frogSize">
+        <option value="small">Small</option>
+        <option value="normal">Normal</option>
+        <option value="large">Large</option>
+      </select>
+      <br><br>
+
+      <button type="submit" class="frogButton1" [disabled]="!frogForm.valid">Submit</button>
+    </form>
+  }
+</div>
