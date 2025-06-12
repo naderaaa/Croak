@@ -1,6 +1,6 @@
 <main>
   <div>
-    <h1 class="title">{{ title }}</h1>
+    <h1 class="title">Frog Tasks!</h1>
   </div>
   
 </main>
@@ -8,29 +8,45 @@
 <!-- <div [innerHtml]="tasksToHTML()"></div> -->
 
 @for (task of tasks; track task.description; let i = $index) {
-  <input type="checkbox" name="task{{i}}"> {{ task.description }}
-  <button class="frogButton2"><img src="/assets/images/sampool.png" alt="idk" fill/></button> 
+  <!-- <button class="frogButton2"><img src="/assets/images/sampool.png" alt="idk" fill/></button>  -->
+   <div style="display: flex; align-items: center;">
+    @if (task.size == "large") {
+        <img src="/assets/images/largefrog.png" width="60em" (click)="removeTask(i)" class="frogButton2"/>
+    } 
+    @else if (task.size == "medium") {
+        <img src="/assets/images/mediumfrog.png" width="60em" (click)="removeTask(i)" class="frogButton2"/>
+    }
+    @else if (task.size == "small") {
+        <img src="/assets/images/smallfrog.png" width="60em" (click)="removeTask(i)" class="frogButton2"/>
+    }
+    {{ task.description }}
+    
+   </div>
+   
+
   <br>
 }
 
-<router-outlet /><p>Task count: {{ tasks.length }}</p>
+<router-outlet />
 
 <div class="bottom-bar">
+  <p>Task count: {{ tasks.length }}</p>
+
   <button (click)="addTask()" class="frogButton1">Add a Task!</button>
   @if (taskFieldRequested) {
     <form [formGroup]="frogForm" id="addFrogForm" (ngSubmit)="handleSubmit()">
       
-      Task: <input type="text" formControlName="task" required/><br>
+      Task: <input type="text" formControlName="task" class="border rounded-sm mb-1 px-1" required/><br>
 
-      Name your frog! (optional) <input type="text" formControlName="frogName"/><br> 
+      Name your frog! (optional) <input type="text" formControlName="frogName" class="border rounded-sm mb-1 px-1" /><br> 
 
       Give your frog a size! (optional)
-      <select formControlName="frogSize">
+      <select formControlName="frogSize" class="border rounded-sm mb-2" >
         <option value="small">Small</option>
-        <option value="normal">Normal</option>
+        <option value="medium">Medium</option>
         <option value="large">Large</option>
       </select>
-      <br><br>
+      <br>
 
       <button type="submit" class="frogButton1" [disabled]="!frogForm.valid">Submit</button>
     </form>

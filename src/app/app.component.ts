@@ -18,7 +18,7 @@ export class AppComponent {
   title = 'Croak';
   taskFieldRequested = false;
   numFrogTasks = 0;
-  tasks: Task[] = [new Task("Call mom", "", "Small")];
+  tasks: Task[] = [new Task("Call mom", "", "large")];
 
   constructor(private sanitizer: DomSanitizer) {}
 
@@ -63,6 +63,10 @@ export class AppComponent {
     this.tasks.forEach(x => ret += `<input type="checkbox" name="task${count}" value="task${count}"><label for="task${count++}">${x.description}</label>`);
 
     return this.sanitizer.bypassSecurityTrustHtml(ret);
+  }
+
+  removeTask(taskNo:number) {
+    this.tasks.splice(taskNo, 1);
   }
 }
 

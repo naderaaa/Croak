@@ -1,3 +1,6 @@
+@import "tailwindcss";
+
+
 :host {
   --bright-blue: oklch(51.01% 0.274 263.83);
   --electric-violet: oklch(53.18% 0.28 296.97);
@@ -184,6 +187,15 @@ main {
   background-color: rgb(197, 250, 186);
 }
 
+.frogButton2{
+  transform: scale(1.15);
+  margin-right: .5rem;
+}
+
+
+.frogButton2:hover {
+  transform: scale(1);
+}
 .bottom-bar {
   position: fixed;
   bottom: 0;
@@ -201,3 +213,4 @@ main {
 #cont {
   position: relative;
 }
+
