@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+html {
+    background-color: #f5f5f5;
+    color: rgb(24, 24, 24);
+    margin: .5rem;
+    /* color: wheat; */
+}
+
+@font-face {
+    font-family: Geist;
+    src: url(assets/Geist-VariableFont_wght.ttf) ;
+}
