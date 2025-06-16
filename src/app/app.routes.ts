@@ -6,13 +6,13 @@ import { Home } from './home';
 
 export const routes: Routes = [
     {
-        path: 'home',
-        title: 'App Home Page',
+        path: '',
+        title: 'Tasks',
         component: Home,
     },
     {
         path: 'collection',
-        title: 'Collection Page',
+        title: 'Collection',
         component: Collection,
     },
 ];

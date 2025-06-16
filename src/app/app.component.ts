@@ -11,5 +11,4 @@ import { NgOptimizedImage } from '@angular/common'
   template: '<router-outlet/>',
 })
 
-
 export class AppComponent {}
