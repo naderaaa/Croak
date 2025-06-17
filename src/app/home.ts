@@ -70,7 +70,7 @@ export class Home {
   }
 }
 
-class Task {
+export class Task {
   description: string;
   
   name: string;
