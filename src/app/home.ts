@@ -20,7 +20,10 @@ import { UserService, User } from './user.service';
 export class Home {
   title = 'Croak';
   taskFieldRequested = false;
+  loggedin = false;
+  showLoginPage = true;
   numFrogTasks = 0;
+  user:User|undefined = undefined;
   tasks: Task[] = [];
 
   constructor(private sanitizer: DomSanitizer, private userService: UserService) {}
@@ -31,12 +34,48 @@ export class Home {
     frogSize: new FormControl('', Validators.required),
   });
 
+  loginForm = new FormGroup({
+    username: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.required),
+  });
+
+  signupForm = new FormGroup({
+    username: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.required),
+    confirmPassword: new FormControl('', Validators.required),
+  });
+
   addTask() {
     if (this.taskFieldRequested == false) {
       this.taskFieldRequested = true;
     } else {
       this.taskFieldRequested = false;
     }
+  }
+
+  handleLogin() {
+    var userList: User[] = [];
+    
+
+    this.userService.getAll().subscribe(data => {
+      userList = data;
+      
+      var found = userList.find((element) => element.username == this.loginForm.value.username);
+      userList.forEach((element) => console.log(element.username));
+      if (found?.password == this.loginForm.value.password) {
+        this.loggedin = true;
+        this.user = found!;
+        // add cryptography
+      }
+    });
+
+
+    
+
+
+
+    // if (this.loginForm.value.password)
+
   }
 
   handleSubmit() {

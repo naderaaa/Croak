@@ -5,58 +5,87 @@
   
 </main>
 
-<!-- <div [innerHtml]="tasksToHTML()"></div> -->
- <div id="taskpanel">
-    @for (task of tasks; track task.description; let i = $index) {
-      <div class="frogs">
-        @if (task.size == "large") {
-            <img src="/assets/images/largefrog.png" width="60" (click)="removeTask(i)" class="frogButton2" alt="largefrog "/>
-        } 
-        @else if (task.size == "medium") {
-            <img src="/assets/images/mediumfrog.png" width="60" (click)="removeTask(i)" class="frogButton2" alt="mediumfrog"/>
-        }
-        @else if (task.size == "small") {
-            <img src="/assets/images/smallfrog.png" width="60" (click)="removeTask(i)" class="frogButton2" alt="smallfrog"/>
-        }
-        {{ task.description }}
-        
-      </div>
-      
 
-      
-    }
- </div>
-
-
-
-
-<div class="bottom-bar">
-  Task count: {{ tasks.length }}
-  @if (!taskFieldRequested) {
-    <button (click)="addTask()" class="frogButton1">Add a Task!</button>
-  }
-  @if (taskFieldRequested) {
-      <button (click)="addTask()" class="frogButton1">Hide</button>
-    <form [formGroup]="frogForm" id="addFrogForm" (ngSubmit)="handleSubmit()">
-      
-      Task: <input type="text" formControlName="task" class="border rounded-sm mb-1 px-1" required/><br>
-
-      Name your frog! (optional) <input type="text" formControlName="frogName" class="border rounded-sm mb-1 px-1" /><br> 
-
-      Give your frog a size! (optional)
-      <select formControlName="frogSize" class="border rounded-sm mb-2" >
-        <option value="small">Small</option>
-        <option value="medium">Medium</option>
-        <option value="large">Large</option>
-        
-      </select>
-      <br>
-
-      <button type="submit" class="frogButton1" [disabled]="!frogForm.valid">Submit</button>
+@if (!loggedin) {
+  @if (showLoginPage) {
+    <form [formGroup]="loginForm" class="place-self-center" (ngSubmit)="handleLogin()">
+      Username: <input type="text" class="border rounded-sm mb-1 px-1" formControlName="username" required><br>
+      Password: <input type="password" class="border rounded-sm mb-1 px-1" formControlName="password" required><br>
+      <button type="submit" class="frogButton1 mr-1">Log In</button>
+      <button class="frogButton1" (click)="showLoginPage = false">Sign Up Instead</button>
+    </form>
+  } 
+  @else {
+    <form [formGroup]="signupForm" class="place-self-center">
+      Username: <input type="text" class="border rounded-sm mb-1 px-1" formControlName="username" required><br>
+      Password: <input type="password" class="border rounded-sm mb-1 px-1" formControlName="password" required><br>
+      Confirm Password: <input type="password" class="border rounded-sm mb-1 px-1" formControlName="confirmPassword" required><br>
+      <button type="submit" class="frogButton1 mr-1">Sign Up</button>
+      <button class="frogButton1" (click)="showLoginPage = true">Log In Instead</button>
     </form>
   }
+  
+  
 
-  <!-- <button (click)="" -->
-</div>
+
+
+}
+@else {
+  <!-- <div [innerHtml]="tasksToHTML()"></div> -->
+  <div id="taskpanel">
+      @for (task of tasks; track task.description; let i = $index) {
+        <div class="frogs">
+          @if (task.size == "large") {
+              <img src="/assets/images/largefrog.png" width="60" (click)="removeTask(i)" class="frogButton2" alt="largefrog "/>
+          } 
+          @else if (task.size == "medium") {
+              <img src="/assets/images/mediumfrog.png" width="60" (click)="removeTask(i)" class="frogButton2" alt="mediumfrog"/>
+          }
+          @else if (task.size == "small") {
+              <img src="/assets/images/smallfrog.png" width="60" (click)="removeTask(i)" class="frogButton2" alt="smallfrog"/>
+          }
+          {{ task.description }}
+          
+        </div>
+        
+
+        
+      }
+  </div>
+
+
+
+
+  <div class="bottom-bar">
+    Task count: {{ tasks.length }}
+    @if (!taskFieldRequested) {
+      <button (click)="addTask()" class="frogButton1">Add a Task!</button>
+    }
+    @if (taskFieldRequested) {
+      <button (click)="addTask()" class="frogButton1">Hide</button>
+      <form [formGroup]="frogForm" id="addFrogForm" (ngSubmit)="handleSubmit()">
+        
+        Task: <input type="text" formControlName="task" class="border rounded-sm mb-1 px-1" required/><br>
+
+        Name your frog! (optional) <input type="text" formControlName="frogName" class="border rounded-sm mb-1 px-1" /><br> 
+
+        Give your frog a size! (optional)
+        <select formControlName="frogSize" class="border rounded-sm mb-2" >
+          <option value="small">Small</option>
+          <option value="medium">Medium</option>
+          <option value="large">Large</option>
+          
+        </select>
+        <br>
+
+        <button type="submit" class="frogButton1" [disabled]="!frogForm.valid">Submit</button>
+      </form>
+    }
+
+    <!-- <button (click)="" -->
+  </div>
+
+}
+
 
 <router-outlet/>

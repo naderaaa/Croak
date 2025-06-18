@@ -7,12 +7,14 @@ import { Task } from './home';
 export interface User {
   id: number;
   username: string;
+  password: string;
   tasks: Task[];
 }
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class UserService {
   private apiUrl = 'http://localhost:8000/api/User/';
 
