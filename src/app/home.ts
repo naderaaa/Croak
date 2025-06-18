@@ -3,6 +3,8 @@ import { RouterOutlet } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { NgOptimizedImage } from '@angular/common'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { UserService, User } from './user.service';
+
 
 
 
@@ -19,9 +21,9 @@ export class Home {
   title = 'Croak';
   taskFieldRequested = false;
   numFrogTasks = 0;
-  tasks: Task[] = [new Task("Call mom", "", "large")];
+  tasks: Task[] = [];
 
-  constructor(private sanitizer: DomSanitizer) {}
+  constructor(private sanitizer: DomSanitizer, private userService: UserService) {}
 
   frogForm = new FormGroup({
     task: new FormControl('', Validators.required),
@@ -39,13 +41,15 @@ export class Home {
 
   handleSubmit() {
     if (this.frogForm.value.frogName == "") {
-      alert("New frog created!");
+      var newFrogName = Task.assignName();
+      
+      alert(newFrogName + " created!");
 
-      this.addFrog(this.frogForm.value.task + "", "", this.frogForm.value.frogSize + "");
+      this.addFrog(this.frogForm.value.task + "", newFrogName + "", this.frogForm.value.frogSize + "");
       
     } else {
       alert(this.frogForm.value.frogName + " created!");
-            this.addFrog(this.frogForm.value.task + "", this.frogForm.value.frogName + "", this.frogForm.value.frogSize + "");
+      this.addFrog(this.frogForm.value.task + "", this.frogForm.value.frogName + "", this.frogForm.value.frogSize + "");
 
     }
   }
@@ -76,17 +80,13 @@ export class Task {
   name: string;
   size: string;
 
-  constructor(desc: string, name: string | undefined, size:string){
+  constructor(desc: string, name: string, size:string){
     this.description = desc;
     this.size = size;
-    if (name != undefined) {
-      this.name = name;
-    } else {
-      this.name = this.assignName();
-    }
+    this.name = name;
   }
 
-  assignName() {
+  static assignName() {
     let val = Math.random()*6;
     let ret = "";
     if (val >= 0 && val < 1) {
