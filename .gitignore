@@ -44,4 +44,4 @@ Thumbs.db
 
 # Encryption
 src/app/aesencrypt-decrypt.service.ts
-# backend/db.sqlite3
+backend/db.sqlite3
