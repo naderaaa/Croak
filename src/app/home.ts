@@ -55,8 +55,6 @@ export class Home {
 
   handleLogin() {
     var userList: User[] = [];
-    
-
     this.userService.getAll().subscribe(data => {
       userList = data;
       
@@ -65,17 +63,44 @@ export class Home {
       if (found?.password == this.loginForm.value.password) {
         this.loggedin = true;
         this.user = found!;
-        // add cryptography
+        // add encryption
       }
     });
+  }
 
+  handleSignup() {
+    if (this.signupForm.value.password == this.signupForm.value.confirmPassword) {
+      this.userService.getAll().subscribe(data => {
+        
 
+        if (data.some((element) => element.username == this.signupForm.value.username)) {
+          alert("Username unavailable!");
+        } else {
+          var newUser = {
+            id: data.length,
+            username: this.signupForm.value.username!,
+            password: this.signupForm.value.password!,
+            tasks: [],
+          };
+
+          this.userService.create(newUser).subscribe({
+            next: (createdUser) => {
+              console.log("done!");
+              this.loggedin = true;
+                this.user = createdUser!;
+            },
+            error: (err) => {
+              console.error("Error creating user:", err);
+            }
+          });
+        }
+        
+
+      });
+      
+      
+    }
     
-
-
-
-    // if (this.loginForm.value.password)
-
   }
 
   handleSubmit() {

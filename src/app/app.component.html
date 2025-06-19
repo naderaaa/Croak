@@ -16,7 +16,7 @@
     </form>
   } 
   @else {
-    <form [formGroup]="signupForm" class="place-self-center">
+    <form [formGroup]="signupForm" class="place-self-center" (ngSubmit)="handleSignup()">
       Username: <input type="text" class="border rounded-sm mb-1 px-1" formControlName="username" required><br>
       Password: <input type="password" class="border rounded-sm mb-1 px-1" formControlName="password" required><br>
       Confirm Password: <input type="password" class="border rounded-sm mb-1 px-1" formControlName="confirmPassword" required><br>
