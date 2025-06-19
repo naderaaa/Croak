@@ -5,6 +5,9 @@ import { NgOptimizedImage } from '@angular/common'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { UserService, User } from './user.service';
 import { error } from 'node:console';
+import { AESEncryptDecryptService } from './aesencrypt-decrypt.service'; 
+
+
 
 
 
@@ -28,7 +31,7 @@ export class Home {
   userid: number | undefined = undefined;
   tasks: Task[] = [];
 
-  constructor(private sanitizer: DomSanitizer, private userService: UserService) {}
+  constructor(private sanitizer: DomSanitizer, private userService: UserService, private _AESEncryptDecryptService: AESEncryptDecryptService) {}
 
   frogForm = new FormGroup({
     task: new FormControl('', Validators.required),
@@ -61,8 +64,7 @@ export class Home {
       userList = data;
       
       var found = userList.find((element) => element.username == this.loginForm.value.username);
-      userList.forEach((element) => console.log(element.username));
-      if (found?.password == this.loginForm.value.password) {
+      if (this._AESEncryptDecryptService.decrypt(found?.password!) == this.loginForm.value.password) {
         this.loggedin = true;
         this.user = found!;
         this.userid = found?.id;
@@ -79,33 +81,29 @@ export class Home {
         if (data.some((element) => element.username == this.signupForm.value.username)) {
           alert("Username unavailable!");
         } else {
+
+          var encryptedPass = this._AESEncryptDecryptService.encrypt(this.signupForm.value.password!);
+
           var newUser = {
             id: data.length,
             username: this.signupForm.value.username!,
-            password: this.signupForm.value.password!,
+            password: encryptedPass,
             tasks: [],
           };
 
           this.userService.create(newUser).subscribe({
             next: (createdUser) => {
-              console.log("done!");
               this.loggedin = true;
               this.user = createdUser!;
               this.userid = createdUser?.id;
-
             },
             error: (err) => {
               console.error("Error creating user:", err);
             }
           });
         }
-        
-
       });
-      
-      
     }
-    
   }
 
   handleSubmit() {
@@ -128,7 +126,6 @@ export class Home {
     let task = new Task(taskMsg, name, size);
     this.tasks.push(task);
     this.user?.tasks.push(task);
-    console.log(this.userid);
     this.userService.update(this.userid!, this.user!).subscribe(
       (element) => {console.log(this.user?.tasks);}
     );

@@ -23,6 +23,8 @@
     "@angular/ssr": "^17.3.17",
     "@tailwindcss/postcss": "^4.1.10",
     "@tailwindcss/vite": "^4.1.10",
+    "@types/crypto-js": "^4.2.2",
+    "crypto-js": "^4.2.0",
     "express": "^4.18.2",
     "postcss": "^8.5.5",
     "rxjs": "~7.8.0",
