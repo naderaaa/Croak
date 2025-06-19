@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular
 import { NgOptimizedImage } from '@angular/common'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { UserService, User } from './user.service';
+import { error } from 'node:console';
 
 
 
@@ -23,7 +24,8 @@ export class Home {
   loggedin = false;
   showLoginPage = true;
   numFrogTasks = 0;
-  user:User|undefined = undefined;
+  user: User | undefined = undefined;
+  userid: number | undefined = undefined;
   tasks: Task[] = [];
 
   constructor(private sanitizer: DomSanitizer, private userService: UserService) {}
@@ -63,7 +65,8 @@ export class Home {
       if (found?.password == this.loginForm.value.password) {
         this.loggedin = true;
         this.user = found!;
-        // add encryption
+        this.userid = found?.id;
+        this.loadInTasks();
       }
     });
   }
@@ -87,7 +90,9 @@ export class Home {
             next: (createdUser) => {
               console.log("done!");
               this.loggedin = true;
-                this.user = createdUser!;
+              this.user = createdUser!;
+              this.userid = createdUser?.id;
+
             },
             error: (err) => {
               console.error("Error creating user:", err);
@@ -122,7 +127,15 @@ export class Home {
     this.numFrogTasks++;
     let task = new Task(taskMsg, name, size);
     this.tasks.push(task);
+    this.user?.tasks.push(task);
+    console.log(this.userid);
+    this.userService.update(this.userid!, this.user!).subscribe(
+      (element) => {console.log(this.user?.tasks);}
+    );
+  }
 
+  loadInTasks() {
+    this.user?.tasks.forEach((element) => this.tasks.push(new Task(element.description, element.name, element.size)))
   }
 
   tasksToHTML(): SafeHtml {
@@ -135,6 +148,10 @@ export class Home {
 
   removeTask(taskNo:number) {
     this.tasks.splice(taskNo, 1);
+    this.user?.tasks.splice(taskNo, 1);
+    this.userService.update(this.userid!, this.user!).subscribe(
+      (element) => {console.log(this.user?.tasks);}
+    );
   }
 }
 
