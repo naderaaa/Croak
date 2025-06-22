@@ -88,6 +88,9 @@ export class Home {
             id: data.length,
             username: this.signupForm.value.username!,
             password: encryptedPass,
+            totalNumTasks: 0,
+            longestLivingTask: { "description":"a", "name":"b", "size":"c", "creationDate": 0 },
+            longestLivingTaskTime: 0,
             tasks: [],
           };
 
@@ -96,6 +99,7 @@ export class Home {
               this.loggedin = true;
               this.user = createdUser!;
               this.userid = createdUser?.id;
+              
             },
             error: (err) => {
               console.error("Error creating user:", err);
@@ -126,6 +130,8 @@ export class Home {
     let task = new Task(taskMsg, name, size);
     this.tasks.push(task);
     this.user?.tasks.push(task);
+    this.user!.totalNumTasks++;
+
     this.userService.update(this.userid!, this.user!).subscribe(
       (element) => {console.log(this.user?.tasks);}
     );
@@ -144,11 +150,22 @@ export class Home {
   }
 
   removeTask(taskNo:number) {
-    this.tasks.splice(taskNo, 1);
-    this.user?.tasks.splice(taskNo, 1);
-    this.userService.update(this.userid!, this.user!).subscribe(
-      (element) => {console.log(this.user?.tasks);}
+    let removedTask = this.tasks[taskNo];
+    this.userService.get(this.userid!).subscribe(
+      (element) => { 
+        let lifespan = Date.now() - element.tasks[taskNo].creationDate;
+        if (lifespan > element.longestLivingTaskTime || element.longestLivingTaskTime == 0) {
+          this.user!.longestLivingTaskTime = lifespan;
+          this.user!.longestLivingTask = removedTask;
+        }
+        this.tasks.splice(taskNo, 1);
+        this.user?.tasks.splice(taskNo, 1);
+        this.userService.update(this.userid!, this.user!).subscribe(
+          (element) => {console.log(this.user?.tasks);}
+        );
+      }
     );
+   
   }
 }
 
