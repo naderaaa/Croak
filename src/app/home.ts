@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import { NgOptimizedImage } from '@angular/common'
+import { NgOptimizedImage, Time } from '@angular/common'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { UserService, User } from './user.service';
 import { error } from 'node:console';
@@ -154,14 +154,15 @@ export class Home {
 
 export class Task {
   description: string;
-  
   name: string;
   size: string;
-
+  creationDate: number;
+  
   constructor(desc: string, name: string, size:string){
     this.description = desc;
     this.size = size;
     this.name = name;
+    this.creationDate = Date.now();
   }
 
   static assignName() {
