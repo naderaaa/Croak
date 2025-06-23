@@ -33,22 +33,36 @@
 @else {
   @if (showCollectionPage) {
     @if (user!.longestLivingTask.creationDate != 0) {
-      <span class="text-lg">Longest Living Frog Task: </span><span (click)="showLLFTDescription = true">"{{ user!.longestLivingTask.name }}" <span class="text-xs">(click for more info)</span></span>
+      <span class="text-lg">Longest Living Frog Task: </span><span (click)="showLLFTDescription = !showLLFTDescription">"{{ user!.longestLivingTask.name }}" <span class="text-xs">(click for more info)</span></span>
       @if (showLLFTDescription) {
         <div class="indent-8">
           Description: "{{user!.longestLivingTask.description}}"<br>
+        </div>
+        <div class="indent-8">
           It took you {{ user!.longestLivingTaskTime | timefmt }} to complete this task!
-
-
         </div>
       }
-
-
-
     }
+  
     @else {
       You haven't completed any tasks :(
     }
+    <div class="text-lg">Total Number of Tasks: {{ user!.totalNumTasks }}</div>
+      @if (totalTaskRank == 0) {
+        <div class="indent-8">Congratulations, you're the top user!</div>
+      } 
+      @else {
+        <div class="indent-8">You're in the top {{ totalTaskRank }}% of users!</div>
+      }
+    <div class="text-lg">Total Number of Tasks Completed: {{ user!.totalNumTasks - user!.tasks.length }}</div>
+      @if (totalTaskCompletedRank == 0) {
+        <div class="indent-8">Congratulations, you're the top user!</div>
+      } 
+      @else {
+        <div class="indent-8">You're in the top {{ totalTaskCompletedRank }}% of users!</div>
+      }
+   
+    
 
 
   } 

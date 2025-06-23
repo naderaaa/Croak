@@ -29,6 +29,8 @@ export class Home {
   showCollectionPage = false;
   showLLFTDescription = false;
   numFrogTasks = 0;
+  totalTaskRank = 0;
+  totalTaskCompletedRank = 0;
   user: User | undefined = undefined;
   userid: number | undefined = undefined;
   tasks: Task[] = [];
@@ -172,8 +174,44 @@ export class Home {
   }
 
   showCollection() {
-
     this.showCollectionPage = true;
+    this.calculatePercentileTasks();
+  }
+
+  calculatePercentileTasks() {
+    let numTaskUsers: number[] = [];
+    this.userService.getAll().subscribe(
+      value => {
+        value.forEach((user) => numTaskUsers.push(user.totalNumTasks));
+        // console.log(numTaskUsers);
+        numTaskUsers.sort();
+        let index = numTaskUsers.findIndex((num) => num == this.user!.totalNumTasks) + 1;
+        let x = index / numTaskUsers.length;
+        x *= 100;
+        this.totalTaskRank = 100 - x;
+      }
+    );
+
+    // return "3";
+    // console.log(numTaskUsers);
+    
+    // console.log(this.totalTaskRank);
+
+  }
+
+  calculatePercentileCompletedTasks() {
+    let numTaskUsers: number[] = [];
+    this.userService.getAll().subscribe(
+      value => {
+        value.forEach((user) => numTaskUsers.push(user.totalNumTasks - user.tasks.length));
+        // console.log(numTaskUsers);
+        numTaskUsers.sort();
+        let index = numTaskUsers.findIndex((num) => num == this.user!.totalNumTasks) + 1;
+        let x = index / numTaskUsers.length;
+        x *= 100;
+        this.totalTaskCompletedRank = 100 - x;
+      }
+    );
 
   }
 }

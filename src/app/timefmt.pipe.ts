@@ -14,13 +14,7 @@ export class TimefmtPipe implements PipeTransform {
     value = (value - secs) / 60;
     var mins = value % 60;
     var hrs = (value - mins) / 60;
-    // var str = secs + ' seconds';
-    // if (mins == 0) {
-    //   var hold = mins + ' minutes';
-    //   if (hrs == 0) {
-    //     str = hold + ' and' + str;
-    //   }
-    // }
+
     var numVars = 3;
     if (secs== 0) {
       numVars--;
