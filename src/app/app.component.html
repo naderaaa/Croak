@@ -31,7 +31,30 @@
 
 }
 @else {
-  <!-- <div [innerHtml]="tasksToHTML()"></div> -->
+  @if (showCollectionPage) {
+    @if (user!.longestLivingTask.creationDate != 0) {
+      <span class="text-lg">Longest Living Frog Task: </span><span (click)="showLLFTDescription = true">"{{ user!.longestLivingTask.name }}" <span class="text-xs">(click for more info)</span></span>
+      @if (showLLFTDescription) {
+        <div class="indent-8">
+          Description: "{{user!.longestLivingTask.description}}"<br>
+          It took you {{ user!.longestLivingTaskTime | timefmt }} to complete this task!
+
+
+        </div>
+      }
+
+
+
+    }
+    @else {
+      You haven't completed any tasks :(
+    }
+
+
+  } 
+  @else {
+
+    <!-- <div [innerHtml]="tasksToHTML()"></div> -->
   <div id="taskpanel">
       @for (task of tasks; track task.description; let i = $index) {
         <div class="frogs">
@@ -53,6 +76,8 @@
       }
   </div>
 
+  
+
 
 
 
@@ -60,6 +85,7 @@
     Task count: {{ tasks.length }}
     @if (!taskFieldRequested) {
       <button (click)="addTask()" class="frogButton1">Add a Task!</button>
+      <button class="frogButton1" (click)="showCollection()">Visit Collection</button>
     }
     @if (taskFieldRequested) {
       <button (click)="addTask()" class="frogButton1">Hide</button>
@@ -84,6 +110,9 @@
 
     <!-- <button (click)="" -->
   </div>
+
+  }
+  
 
 }
 

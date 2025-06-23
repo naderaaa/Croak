@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import { NgOptimizedImage, Time } from '@angular/common'
+import { NgOptimizedImage, Time} from '@angular/common'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { TimefmtPipe } from './timefmt.pipe';
 import { UserService, User } from './user.service';
-import { error } from 'node:console';
 import { AESEncryptDecryptService } from './aesencrypt-decrypt.service'; 
 
 
@@ -15,7 +15,7 @@ import { AESEncryptDecryptService } from './aesencrypt-decrypt.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ReactiveFormsModule, NgOptimizedImage],
+  imports: [RouterOutlet, ReactiveFormsModule, NgOptimizedImage, TimefmtPipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -26,10 +26,13 @@ export class Home {
   taskFieldRequested = false;
   loggedin = false;
   showLoginPage = true;
+  showCollectionPage = false;
+  showLLFTDescription = false;
   numFrogTasks = 0;
   user: User | undefined = undefined;
   userid: number | undefined = undefined;
   tasks: Task[] = [];
+  
 
   constructor(private sanitizer: DomSanitizer, private userService: UserService, private _AESEncryptDecryptService: AESEncryptDecryptService) {}
 
@@ -166,6 +169,12 @@ export class Home {
       }
     );
    
+  }
+
+  showCollection() {
+
+    this.showCollectionPage = true;
+
   }
 }
 

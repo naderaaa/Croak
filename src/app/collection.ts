@@ -4,7 +4,7 @@ import { UserService, User } from './user.service';
 @Component({
   selector: 'app-collection',
   template: `
-    hi
+    
     @for (item of models; track item.username) {
       {{ item.username }} 
       {{ item.tasks }}
