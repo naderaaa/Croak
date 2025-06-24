@@ -6,6 +6,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TimefmtPipe } from './timefmt.pipe';
 import { UserService, User } from './user.service';
 import { AESEncryptDecryptService } from './aesencrypt-decrypt.service'; 
+import { StorageService } from './storage.service';
+import { waitForAsync } from '@angular/core/testing';
 
 
 
@@ -36,7 +38,7 @@ export class Home {
   tasks: Task[] = [];
   
 
-  constructor(private sanitizer: DomSanitizer, private userService: UserService, private _AESEncryptDecryptService: AESEncryptDecryptService) {}
+  constructor(private sanitizer: DomSanitizer, private userService: UserService, private _AESEncryptDecryptService: AESEncryptDecryptService, private storage: StorageService) {}
 
   frogForm = new FormGroup({
     task: new FormControl('', Validators.required),
@@ -62,6 +64,23 @@ export class Home {
       this.taskFieldRequested = false;
     }
   }
+  
+  ngOnInit() {
+
+    if (this.storage.getData("userid") != null) {
+      var userList: User[] = [];
+      this.userService.getAll().subscribe(data => {
+        userList = data;
+        var found = userList.find((element) => element.id == Number(this.storage.getData("userid")));
+        if (found?.password == this.storage.getData("pass")) {
+          this.loggedin = true;
+          this.user = found!;
+          this.userid = found?.id;
+          this.loadInTasks();
+        }
+      });
+    }
+  }
 
   handleLogin() {
     var userList: User[] = [];
@@ -72,8 +91,12 @@ export class Home {
       if (this._AESEncryptDecryptService.decrypt(found?.password!) == this.loginForm.value.password) {
         this.loggedin = true;
         this.user = found!;
+
         this.userid = found?.id;
+        this.storage.saveData("userid", this.userid + "");
+        this.storage.saveData("pass", found?.password!);
         this.loadInTasks();
+        
       }
     });
   }
@@ -88,6 +111,7 @@ export class Home {
         } else {
 
           var encryptedPass = this._AESEncryptDecryptService.encrypt(this.signupForm.value.password!);
+        
 
           var newUser = {
             id: data.length,
@@ -104,7 +128,8 @@ export class Home {
               this.loggedin = true;
               this.user = createdUser!;
               this.userid = createdUser?.id;
-              
+              this.storage.saveData("userid", this.userid + "");
+              this.storage.saveData("pass", encryptedPass);
             },
             error: (err) => {
               console.error("Error creating user:", err);
@@ -113,6 +138,21 @@ export class Home {
         }
       });
     }
+  }
+  
+  handleLogout() {
+    this.taskFieldRequested = false;
+    this.loggedin = false;
+    this.showLoginPage = true;
+    this.showCollectionPage = false;
+    this.showLLFTDescription = false;
+    this.numFrogTasks = 0;
+    this.totalTaskRank = 0;
+    this.totalTaskCompletedRank = 0;
+    this.user = undefined;
+    this.userid = undefined;
+    this.tasks = [];
+    this.storage.clearData();
   }
 
   handleSubmit() {
@@ -211,6 +251,7 @@ export class Home {
         x *= 100;
         this.totalTaskCompletedRank = 100 - x;
       }
+      
     );
 
   }

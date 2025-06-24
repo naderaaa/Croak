@@ -7,6 +7,7 @@
 
 
 @if (!loggedin) {
+  
   @if (showLoginPage) {
     <form [formGroup]="loginForm" class="place-self-center" (ngSubmit)="handleLogin()">
       Username: <input type="text" class="border rounded-sm mb-1 px-1" formControlName="username" required><br>
@@ -61,10 +62,7 @@
       @else {
         <div class="indent-8">You're in the top {{ totalTaskCompletedRank }}% of users!</div>
       }
-   
-    
-
-
+      
   } 
   @else {
 
@@ -100,6 +98,7 @@
     @if (!taskFieldRequested) {
       <button (click)="addTask()" class="frogButton1">Add a Task!</button>
       <button class="frogButton1" (click)="showCollection()">Visit Collection</button>
+      <button class="frogButton1" (click)="handleLogout()">Log Out</button>
     }
     @if (taskFieldRequested) {
       <button (click)="addTask()" class="frogButton1">Hide</button>
