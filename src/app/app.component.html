@@ -62,6 +62,9 @@
       @else {
         <div class="indent-8">You're in the top {{ totalTaskCompletedRank }}% of users!</div>
       }
+      <div class="bottom-bar">
+        <button class="frogButton1" (click)="showCollectionPage = false">Back to Tasks</button>
+      </div>
       
   } 
   @else {
@@ -121,7 +124,6 @@
       </form>
     }
 
-    <!-- <button (click)="" -->
   </div>
 
   }
